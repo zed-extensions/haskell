@@ -7,7 +7,7 @@ authors = [
     "Pocæus <github@pocaeus.com>",
     "Lei <45155667+leifu1128@users.noreply.github.com>"
 ]
-repository = "https://github.com/zed-industries/zed"
+repository = "https://github.com/zed-extensions/haskell"
 
 [language_servers.hls]
 name = "Haskell Language Server"
