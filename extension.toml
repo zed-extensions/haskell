@@ -16,3 +16,7 @@ language = "Haskell"
 [grammars.haskell]
 repository = "https://github.com/tree-sitter/tree-sitter-haskell"
 commit = "8a99848fc734f9c4ea523b3f2a07df133cbbcec2"
+
+[grammars.cabal]
+repository = "https://gitlab.com/zweimach/tree-sitter-cabal/"
+commit = "6f00f6d4883eb2eb650eea7cc1e95bd25e48419c"
