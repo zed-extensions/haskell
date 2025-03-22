@@ -11,7 +11,7 @@ repository = "https://github.com/zed-extensions/haskell"
 
 [language_servers.hls]
 name = "Haskell Language Server"
-language = "Haskell"
+languages = ["Haskell", "Cabal"]
 
 [grammars.haskell]
 repository = "https://github.com/tree-sitter/tree-sitter-haskell"
