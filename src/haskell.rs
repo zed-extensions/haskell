@@ -1,5 +1,6 @@
 use zed::lsp::{Symbol, SymbolKind};
 use zed::{CodeLabel, CodeLabelSpan};
+use zed_extension_api::settings::LspSettings;
 use zed_extension_api::{self as zed, Result};
 
 struct HaskellExtension;
@@ -11,9 +12,24 @@ impl zed::Extension for HaskellExtension {
 
     fn language_server_command(
         &mut self,
-        _language_server_id: &zed::LanguageServerId,
+        language_server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
     ) -> Result<zed::Command> {
+        let lsp_settings = LspSettings::for_worktree(language_server_id.as_ref(), worktree)?;
+
+        // If the user has specified a binary in their LSP settings,
+        // that takes precedence.
+        if let Some(binary_settings) = lsp_settings.binary {
+            if let Some(path) = binary_settings.path {
+                return Ok(zed::Command {
+                    command: path,
+                    args: binary_settings.arguments.unwrap_or_else(Vec::new),
+                    env: worktree.shell_env(),
+                });
+            }
+        }
+
+        // Otherwise, default to hls installed via ghcup.
         let path = worktree
             .which("haskell-language-server-wrapper")
             .ok_or_else(|| "hls must be installed via ghcup".to_string())?;
