@@ -11,7 +11,7 @@ repository = "https://github.com/zed-extensions/haskell"
 
 [language_servers.hls]
 name = "Haskell Language Server"
-languages = ["Haskell", "Cabal"]
+languages = ["Haskell", "Cabal", "Literate Haskell"]
 
 [grammars.haskell]
 repository = "https://github.com/tree-sitter/tree-sitter-haskell"
@@ -20,3 +20,7 @@ commit = "8a99848fc734f9c4ea523b3f2a07df133cbbcec2"
 [grammars.cabal]
 repository = "https://gitlab.com/zweimach/tree-sitter-cabal/"
 commit = "6f00f6d4883eb2eb650eea7cc1e95bd25e48419c"
+
+[grammars.haskell_literate]
+repository = "https://github.com/LaurentRDC/tree-sitter-haskell-literate"
+commit = "8ad7bd1b1595f4cc1a4ccc775d4a3c460f43a596"
