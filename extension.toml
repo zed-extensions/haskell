@@ -18,8 +18,19 @@ languages = [
 ]
 
 [grammars.haskell]
+# tek/tree-sitter-haskell is more up-to-date than tree-sitter/tree-sitter-haskell,
+# so ideally, we'd switch to it [1]. However, it doesn't commit parser.c, which
+# Zed depends on [2]. Furthermore, regenerating parser.c and pointing the
+# extension to it causes Zed to freeze [3]. So for now, we'll use
+# tree-sitter/tree-sitter-haskell for the grammar, but tek/tree-sitter-haskell
+# for the queries.
+#
+# References:
+# [1]: https://github.com/tek/tree-sitter-haskell/issues/11
+# [2]: https://github.com/zed-industries/zed/issues/52535
+# [3]: https://github.com/zed-industries/zed/discussions/52532
 repository = "https://github.com/tree-sitter/tree-sitter-haskell"
-commit = "8a99848fc734f9c4ea523b3f2a07df133cbbcec2"
+commit = "c30d812bc90827f1a54106a25bc9a6307f5cdcec" # 0.23.1
 
 [grammars.cabal]
 repository = "https://gitlab.com/zweimach/tree-sitter-cabal/"
