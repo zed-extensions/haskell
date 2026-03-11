@@ -2,7 +2,7 @@
   "data" @context
   name: (name) @name) @item
 
-(type_synomym  ; typo: https://github.com/tree-sitter/tree-sitter-haskell/pull/145
+(type_synomym ; typo: https://github.com/tree-sitter/tree-sitter-haskell/pull/145
   "type" @context
   name: (name) @name) @item
 

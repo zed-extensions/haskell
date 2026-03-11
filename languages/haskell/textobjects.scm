@@ -16,4 +16,4 @@
 
 (function
   (match
-      expression: (_) @function.inside))
+    expression: (_) @function.inside))
