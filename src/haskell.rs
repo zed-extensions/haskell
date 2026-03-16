@@ -1,7 +1,9 @@
-use zed::lsp::{Symbol, SymbolKind};
-use zed::{CodeLabel, CodeLabelSpan};
-use zed_extension_api::settings::LspSettings;
-use zed_extension_api::{self as zed, Result};
+use zed_extension_api::{
+    self as zed,
+    lsp::{Symbol, SymbolKind},
+    settings::LspSettings,
+    CodeLabel, CodeLabelSpan, Result,
+};
 
 struct HaskellExtension;
 
