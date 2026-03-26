@@ -1,6 +1,6 @@
-; ----------------------------------------------------------------------------
-; Copied from:
-; https://raw.githubusercontent.com/tek/tree-sitter-haskell/12b8cb96fbdca77dfabbdf71dc5ce8f879df32d0/queries/highlights.scm
+; ------------------------------------------------------------------------------
+; Adapted from https://raw.githubusercontent.com/tek/tree-sitter-haskell/12b8cb96fbdca77dfabbdf71dc5ce8f879df32d0
+; See scripts/download_hs_queries.py
 ;
 ; ----------------------------------------------------------------------------
 ; Parameters and variables
@@ -96,7 +96,7 @@
 (wildcard) @character.special
 
 (module
-  (module_id) @module)
+  (module_id) @title)
 
 [
   "where"
@@ -228,7 +228,7 @@
   left_operand: [
     (variable) @function.call
     (qualified
-      ((module) @module
+      ((module) @title
         (variable) @function.call))
   ])
 
@@ -251,7 +251,7 @@
     left_operand: [
       (variable) @variable
       (qualified
-        ((module) @module
+        ((module) @title
           (variable) @variable))
     ])
   match: (match))
@@ -263,8 +263,8 @@
     (variable) @function.call)
 ]
   .
-  (operator) @_op
-  (#any-of? @_op "$" "<$>" ">>=" "=<<"))
+  (operator) @operator
+  (#any-of? @operator "$" "<$>" ">>=" "=<<"))
 
 ; right hand side of infix operator
 ((infix
@@ -280,8 +280,8 @@
       (variable) @function.call)
   ])
   .
-  (operator) @_op
-  (#any-of? @_op "$" "<$>" "=<<"))
+  (operator) @operator
+  (#any-of? @operator "$" "<$>" "=<<"))
 
 ; decl/function composition, arrows, monadic composition (lhs)
 ([
@@ -290,8 +290,8 @@
     (variable) @function)
 ]
   .
-  (operator) @_op
-  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
+  (operator) @operator
+  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
 
 ; right hand side of infix operator
 ((infix
@@ -307,26 +307,26 @@
       (variable) @function)
   ])
   .
-  (operator) @_op
-  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
+  (operator) @operator
+  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
 
 ; function composition, arrows, monadic composition (rhs)
-((operator) @_op
+((operator) @operator
   .
   [
     (expression/variable) @function
     (expression/qualified
       (variable) @function)
   ]
-  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
+  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
 
 ; function defined in terms of a function composition
 (decl/function
   name: (variable) @function
   (match
     expression: (infix
-      operator: (operator) @_op
-      (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))))
+      operator: (operator) @operator
+      (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))))
 
 (apply
   [
@@ -408,8 +408,8 @@
   name: (variable) @function
   match: (match
     expression: (infix
-      operator: (operator) @_op
-      (#eq? @_op "."))))
+      operator: (operator) @operator
+      (#eq? @operator "."))))
 
 ; ----------------------------------------------------------------------------
 ; Types
@@ -460,7 +460,7 @@
   [
     (variable) @function.call
     (_
-      (module) @module
+      (module) @title
       .
       (variable) @function.call)
   ])
@@ -496,4 +496,4 @@
 
 ; ----------------------------------------------------------------------------
 ; Spell checking
-(comment) @spell
+;(comment) @spell

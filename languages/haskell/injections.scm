@@ -1,6 +1,6 @@
-; ----------------------------------------------------------------------------
-; Copied from:
-; https://raw.githubusercontent.com/tek/tree-sitter-haskell/12b8cb96fbdca77dfabbdf71dc5ce8f879df32d0/queries/highlights.scm
+; ------------------------------------------------------------------------------
+; Adapted from https://raw.githubusercontent.com/tek/tree-sitter-haskell/12b8cb96fbdca77dfabbdf71dc5ce8f879df32d0
+; See scripts/download_hs_queries.py
 ;
 ; -----------------------------------------------------------------------------
 ; General language injection
