@@ -1,6 +1,6 @@
-; ----------------------------------------------------------------------------
-; Copied from:
-; https://raw.githubusercontent.com/tek/tree-sitter-haskell/12b8cb96fbdca77dfabbdf71dc5ce8f879df32d0/queries/highlights.scm
+; ------------------------------------------------------------------------------
+; Adapted from https://raw.githubusercontent.com/tek/tree-sitter-haskell/12b8cb96fbdca77dfabbdf71dc5ce8f879df32d0
+; See scripts/download_hs_queries.py
 ;
 ; ----------------------------------------------------------------------------
 ; Parameters and variables
@@ -29,7 +29,7 @@
 (expression/literal
   (float)) @number.float
 
-(char) @character
+(char) @string
 
 (string) @string
 
@@ -93,10 +93,10 @@
   "@"
 ] @operator
 
-(wildcard) @character.special
+(wildcard) @string.special
 
 (module
-  (module_id) @module)
+  (module_id) @title)
 
 [
   "where"
@@ -156,7 +156,7 @@
   type: (type))
 
 ((decl/signature
-  name: (variable) @_name
+  name: (variable) @_name @variable.x
   type: (type))
   .
   (decl
@@ -179,7 +179,7 @@
   (#eq? @_type "IO"))
 
 ((decl/signature
-  name: (variable) @_name
+  name: (variable) @_name @function.x
   type: (type/apply
     constructor: (name) @_type)
   (#eq? @_type "IO"))
@@ -228,7 +228,7 @@
   left_operand: [
     (variable) @function.call
     (qualified
-      ((module) @module
+      ((module) @title
         (variable) @function.call))
   ])
 
@@ -251,7 +251,7 @@
     left_operand: [
       (variable) @variable
       (qualified
-        ((module) @module
+        ((module) @title
           (variable) @variable))
     ])
   match: (match))
@@ -263,8 +263,8 @@
     (variable) @function.call)
 ]
   .
-  (operator) @_op
-  (#any-of? @_op "$" "<$>" ">>=" "=<<"))
+  (operator) @operator
+  (#any-of? @operator "$" "<$>" ">>=" "=<<"))
 
 ; right hand side of infix operator
 ((infix
@@ -280,8 +280,8 @@
       (variable) @function.call)
   ])
   .
-  (operator) @_op
-  (#any-of? @_op "$" "<$>" "=<<"))
+  (operator) @operator
+  (#any-of? @operator "$" "<$>" "=<<"))
 
 ; decl/function composition, arrows, monadic composition (lhs)
 ([
@@ -290,8 +290,8 @@
     (variable) @function)
 ]
   .
-  (operator) @_op
-  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
+  (operator) @operator
+  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
 
 ; right hand side of infix operator
 ((infix
@@ -307,26 +307,26 @@
       (variable) @function)
   ])
   .
-  (operator) @_op
-  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
+  (operator) @operator
+  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
 
 ; function composition, arrows, monadic composition (rhs)
-((operator) @_op
+((operator) @operator
   .
   [
     (expression/variable) @function
     (expression/qualified
       (variable) @function)
   ]
-  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
+  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
 
 ; function defined in terms of a function composition
 (decl/function
   name: (variable) @function
   (match
     expression: (infix
-      operator: (operator) @_op
-      (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))))
+      operator: (operator) @operator
+      (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))))
 
 (apply
   [
@@ -390,7 +390,7 @@
   type: (function))
 
 ((decl/signature
-  name: (variable) @_name
+  name: (variable) @_name @function.x
   type: (quantified_type))
   .
   (decl/bind
@@ -408,8 +408,8 @@
   name: (variable) @function
   match: (match
     expression: (infix
-      operator: (operator) @_op
-      (#eq? @_op "."))))
+      operator: (operator) @operator
+      (#eq? @operator "."))))
 
 ; ----------------------------------------------------------------------------
 ; Types
@@ -460,7 +460,7 @@
   [
     (variable) @function.call
     (_
-      (module) @module
+      (module) @title
       .
       (variable) @function.call)
   ])
@@ -468,8 +468,8 @@
 ; Highlighting of quasiquote_body for other languages is handled by injections.scm
 ; ----------------------------------------------------------------------------
 ; Exceptions/error handling
-((variable) @keyword.exception
-  (#any-of? @keyword.exception
+((variable) @constant.builtin
+  (#any-of? @constant.builtin
     "error" "undefined" "try" "tryJust" "tryAny" "catch" "catches" "catchJust" "handle" "handleJust"
     "throw" "throwIO" "throwTo" "throwError" "ioError" "mask" "mask_" "uninterruptibleMask"
     "uninterruptibleMask_" "bracket" "bracket_" "bracketOnErrorSource" "finally" "fail"
@@ -477,8 +477,8 @@
 
 ; ----------------------------------------------------------------------------
 ; Debugging
-((variable) @keyword.debug
-  (#any-of? @keyword.debug
+((variable) @constant.builtin
+  (#any-of? @constant.builtin
     "trace" "traceId" "traceShow" "traceShowId" "traceWith" "traceShowWith" "traceStack" "traceIO"
     "traceM" "traceShowM" "traceEvent" "traceEventWith" "traceEventIO" "flushEventLog" "traceMarker"
     "traceMarkerIO"))
@@ -496,4 +496,4 @@
 
 ; ----------------------------------------------------------------------------
 ; Spell checking
-(comment) @spell
+;(comment) @spell
