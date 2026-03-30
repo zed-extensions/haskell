@@ -38,3 +38,17 @@
 (foreign_import
   "foreign" @context
   (entity) @name) @item
+
+; Support for BDD-style test suites, e.g. hspec, skeletest
+(apply
+  function: [
+    (variable)
+    (qualified
+      (variable))
+  ] @_name @context
+  (#any-of? @_name "describe" "it" "test" "prop")
+  argument: [
+    (literal
+      (string))
+    (variable)
+  ] @name) @item
