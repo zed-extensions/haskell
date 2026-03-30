@@ -32,7 +32,8 @@
 
 (instance
   "instance" @context
-  (name) @name) @item
+  name: _ @name
+  patterns: _ @context) @item
 
 (foreign_import
   "foreign" @context
