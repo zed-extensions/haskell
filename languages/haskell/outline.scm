@@ -10,8 +10,21 @@
   "newtype" @context
   name: (name) @name) @item
 
-(signature
-  name: (variable) @name) @item
+; Only top-level signatures
+(declarations
+  (signature
+    name: (variable) @name
+    "::" @context
+    type: _ @context) @item)
+
+; Only top-level binds
+(declarations
+  [
+    (bind
+      name: (variable) @context)
+    (function
+      name: (variable) @context)
+  ] @item)
 
 (class
   "class" @context
