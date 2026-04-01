@@ -1,7 +1,7 @@
 id = "haskell"
 name = "Haskell"
 description = "Haskell support."
-version = "0.1.6"
+version = "0.2.1"
 schema_version = 1
 authors = [
     "Pocæus <github@pocaeus.com>",
@@ -11,7 +11,12 @@ repository = "https://github.com/zed-extensions/haskell"
 
 [language_servers.hls]
 name = "Haskell Language Server"
-languages = ["Haskell", "Cabal", "Literate Haskell"]
+languages = [
+    "Haskell",
+    "Cabal",
+    "Literate Haskell",
+    # "Alex", # https://github.com/haskell/haskell-language-server/issues/4820
+]
 
 [grammars.haskell]
 repository = "https://github.com/tree-sitter/tree-sitter-haskell"
@@ -24,3 +29,7 @@ commit = "6f00f6d4883eb2eb650eea7cc1e95bd25e48419c"
 [grammars.haskell_literate]
 repository = "https://github.com/LaurentRDC/tree-sitter-haskell-literate"
 commit = "8ad7bd1b1595f4cc1a4ccc775d4a3c460f43a596"
+
+[grammars.alex]
+repository = "https://github.com/brandonchinn178/tree-sitter-alex"
+rev = "1b20e2e6592ccd859ae5e06649d8335d19cdb60c"
