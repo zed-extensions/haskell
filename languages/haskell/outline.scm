@@ -1,26 +1,26 @@
-(adt
+(data_type
   "data" @context
-  name: (type) @name) @item
+  name: (name) @name) @item
 
-(type_alias
+(type_synomym ; typo: https://github.com/tree-sitter/tree-sitter-haskell/pull/145
   "type" @context
-  name: (type) @name) @item
+  name: (name) @name) @item
 
 (newtype
   "newtype" @context
-  name: (type) @name) @item
+  name: (name) @name) @item
 
 (signature
   name: (variable) @name) @item
 
 (class
   "class" @context
-  (class_head) @name) @item
+  (name) @name) @item
 
 (instance
   "instance" @context
-  (instance_head) @name) @item
+  (name) @name) @item
 
 (foreign_import
   "foreign" @context
-  (impent) @name) @item
+  (entity) @name) @item
