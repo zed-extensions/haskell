@@ -19,7 +19,7 @@ languages = [
 
 [grammars.haskell]
 repository = "https://github.com/tree-sitter/tree-sitter-haskell"
-commit = "8a99848fc734f9c4ea523b3f2a07df133cbbcec2"
+commit = "c30d812bc90827f1a54106a25bc9a6307f5cdcec" # 0.23.1
 
 [grammars.cabal]
 repository = "https://gitlab.com/zweimach/tree-sitter-cabal/"
