@@ -65,16 +65,6 @@ def update_highlights(s: str) -> str:
         # instead of just normal built-in functions
         .replace("@keyword.exception", "@constant.builtin")
         .replace("@keyword.debug", "@constant.builtin")
-        # @_name is used in some signature highlighting for a local capture,
-        # which overrides the relevant highlighting
-        # We also need to add some arbitrary suffix to avoid clobbering the
-        # scope for (#eq? ...)
-        .replace(sig1, sig1.replace("@_name", "@_name @variable.x"))
-        .replace(sig2, sig2.replace("@_name", "@_name @function.x"))
-        .replace(sig3, sig3.replace("@_name", "@_name @function.x"))
-        # @_op is used as a local capture for predicates, but Zed will actually
-        # override the @operator capture previously set on (operator) nodes.
-        .replace("@_op", "@operator")
         # @spell isn't valid in Zed and overrides the @comment capture. Comment out
         # this line.
         .replace("(comment) @spell", ";(comment) @spell")

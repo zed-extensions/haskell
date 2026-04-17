@@ -156,7 +156,7 @@
   type: (type))
 
 ((decl/signature
-  name: (variable) @_name @variable.x
+  name: (variable) @_name
   type: (type))
   .
   (decl
@@ -179,7 +179,7 @@
   (#eq? @_type "IO"))
 
 ((decl/signature
-  name: (variable) @_name @function.x
+  name: (variable) @_name
   type: (type/apply
     constructor: (name) @_type)
   (#eq? @_type "IO"))
@@ -263,8 +263,8 @@
     (variable) @function.call)
 ]
   .
-  (operator) @operator
-  (#any-of? @operator "$" "<$>" ">>=" "=<<"))
+  (operator) @_op
+  (#any-of? @_op "$" "<$>" ">>=" "=<<"))
 
 ; right hand side of infix operator
 ((infix
@@ -280,8 +280,8 @@
       (variable) @function.call)
   ])
   .
-  (operator) @operator
-  (#any-of? @operator "$" "<$>" "=<<"))
+  (operator) @_op
+  (#any-of? @_op "$" "<$>" "=<<"))
 
 ; decl/function composition, arrows, monadic composition (lhs)
 ([
@@ -290,8 +290,8 @@
     (variable) @function)
 ]
   .
-  (operator) @operator
-  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
+  (operator) @_op
+  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
 
 ; right hand side of infix operator
 ((infix
@@ -307,26 +307,26 @@
       (variable) @function)
   ])
   .
-  (operator) @operator
-  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
+  (operator) @_op
+  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
 
 ; function composition, arrows, monadic composition (rhs)
-((operator) @operator
+((operator) @_op
   .
   [
     (expression/variable) @function
     (expression/qualified
       (variable) @function)
   ]
-  (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))
+  (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))
 
 ; function defined in terms of a function composition
 (decl/function
   name: (variable) @function
   (match
     expression: (infix
-      operator: (operator) @operator
-      (#any-of? @operator "." ">>>" "***" ">=>" "<=<"))))
+      operator: (operator) @_op
+      (#any-of? @_op "." ">>>" "***" ">=>" "<=<"))))
 
 (apply
   [
@@ -390,7 +390,7 @@
   type: (function))
 
 ((decl/signature
-  name: (variable) @_name @function.x
+  name: (variable) @_name
   type: (quantified_type))
   .
   (decl/bind
@@ -408,8 +408,8 @@
   name: (variable) @function
   match: (match
     expression: (infix
-      operator: (operator) @operator
-      (#eq? @operator "."))))
+      operator: (operator) @_op
+      (#eq? @_op "."))))
 
 ; ----------------------------------------------------------------------------
 ; Types
