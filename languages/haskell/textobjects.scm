@@ -1,12 +1,12 @@
 (comment)+ @comment.around
 
 [
-  (adt)
-  (type_alias)
+  (data_type)
+  (type_synomym) ; typo: https://github.com/tree-sitter/tree-sitter-haskell/pull/145
   (newtype)
 ] @class.around
 
-(record_fields
+(fields
   "{"
   (_)* @class.inside
   "}")
@@ -15,4 +15,5 @@
   (function)+) @function.around
 
 (function
-  rhs: (_) @function.inside)
+  (match
+    expression: (_) @function.inside))
