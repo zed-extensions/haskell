@@ -1,9 +1,11 @@
+mod debugger;
+
 use zed_extension_api::{
     self as zed,
     lsp::{Symbol, SymbolKind},
-    serde_json,
     settings::LspSettings,
-    CodeLabel, CodeLabelSpan, Result,
+    CodeLabel, CodeLabelSpan, DebugAdapterBinary, DebugConfig, DebugScenario, DebugTaskDefinition,
+    Result, StartDebuggingRequestArgumentsRequest,
 };
 
 struct HaskellExtension;
@@ -91,6 +93,34 @@ impl zed::Extension for HaskellExtension {
             code,
         })
     }
+
+    fn get_dap_binary(
+        &mut self,
+        adapter_name: String,
+        task: DebugTaskDefinition,
+        user_provided_debug_adapter_path: Option<String>,
+        worktree: &zed::Worktree,
+    ) -> Result<DebugAdapterBinary, String> {
+        crate::debugger::get_dap_binary(
+            adapter_name,
+            task,
+            user_provided_debug_adapter_path,
+            worktree,
+        )
+    }
+
+    fn dap_request_kind(
+        &mut self,
+        adapter_name: String,
+        config: zed::serde_json::Value,
+    ) -> Result<StartDebuggingRequestArgumentsRequest, String> {
+        crate::debugger::dap_request_kind(&adapter_name, &config)
+    }
+
+    fn dap_config_to_scenario(&mut self, config: DebugConfig) -> Result<DebugScenario, String> {
+        crate::debugger::dap_config_to_scenario(config)
+    }
+
 }
 
 zed::register_extension!(HaskellExtension);
