@@ -1,6 +1,7 @@
 use zed_extension_api::{
     self as zed,
     lsp::{Symbol, SymbolKind},
+    serde_json,
     settings::LspSettings,
     CodeLabel, CodeLabelSpan, Result,
 };
@@ -41,6 +42,16 @@ impl zed::Extension for HaskellExtension {
             args: vec!["lsp".to_string()],
             env: worktree.shell_env(),
         })
+    }
+
+    fn language_server_workspace_configuration(
+        &mut self,
+        server_id: &zed::LanguageServerId,
+        worktree: &zed::Worktree,
+    ) -> Result<Option<serde_json::Value>> {
+        Ok(LspSettings::for_worktree(server_id.as_ref(), worktree)
+            .ok()
+            .and_then(|s| s.settings))
     }
 
     fn label_for_symbol(
