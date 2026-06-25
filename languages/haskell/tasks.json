@@ -8,7 +8,8 @@
         "program": "/bin/sh",
         "args": ["-c"]
       }
-    }
+    },
+    "show_command": false
   },
   {
     "label": "Build",
@@ -19,6 +20,7 @@
         "program": "/bin/sh",
         "args": ["-c"]
       }
-    }
+    },
+    "show_command": false
   }
 ]
