@@ -132,8 +132,5 @@ fn test_no_build_tool_test() {
         "haskell-test",
         &[("ZED_CUSTOM_HASKELL_TEST_NAME", "\"Functor\"")],
     );
-    assert!(
-        output.contains("No Stack or Cabal found"),
-        "Got: {output}"
-    );
+    assert!(output.contains("No Stack or Cabal found"), "Got: {output}");
 }
