@@ -50,7 +50,7 @@ impl zed::Extension for HaskellExtension {
         &mut self,
         server_id: &zed::LanguageServerId,
         worktree: &zed::Worktree,
-    ) -> Result<Option<serde_json::Value>> {
+    ) -> Result<Option<zed_extension_api::serde_json::Value>> {
         Ok(LspSettings::for_worktree(server_id.as_ref(), worktree)
             .ok()
             .and_then(|s| s.settings))
@@ -120,7 +120,6 @@ impl zed::Extension for HaskellExtension {
     fn dap_config_to_scenario(&mut self, config: DebugConfig) -> Result<DebugScenario, String> {
         crate::debugger::dap_config_to_scenario(config)
     }
-
 }
 
 zed::register_extension!(HaskellExtension);
