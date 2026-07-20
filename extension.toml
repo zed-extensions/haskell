@@ -18,6 +18,8 @@ languages = [
     # "Alex", # https://github.com/haskell/haskell-language-server/issues/4820
 ]
 
+[debug_adapters.haskell-debugger]
+
 [grammars.haskell]
 repository = "https://github.com/tree-sitter/tree-sitter-haskell"
 commit = "c30d812bc90827f1a54106a25bc9a6307f5cdcec" # 0.23.1
