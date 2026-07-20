@@ -18,8 +18,7 @@ fn merge_haskell_debug_configuration(
         })?;
     map.entry("type".to_string())
         .or_insert(json!(HASKELL_DEBUG_ADAPTER));
-    map.entry("request".to_string())
-        .or_insert(json!("launch"));
+    map.entry("request".to_string()).or_insert(json!("launch"));
     map.entry("name".to_string())
         .or_insert(json!(task.label.clone()));
     Ok(serde_json::Value::Object(map))
