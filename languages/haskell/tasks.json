@@ -1,0 +1,26 @@
+[
+  {
+    "label": "Run",
+    "command": "if [ -f stack.yaml ]; then stack run; elif [ -f cabal.project ] || ls *.cabal 2>/dev/null | grep -q .; then cabal run; else echo 'No Stack or Cabal found to run the code' >&2; exit 1; fi",
+    "tags": ["haskell-run"],
+    "shell": {
+      "with_arguments": {
+        "program": "/bin/sh",
+        "args": ["-c"]
+      }
+    },
+    "show_command": false
+  },
+  {
+    "label": "Build",
+    "command": "if [ -f stack.yaml ]; then stack build; elif [ -f cabal.project ] || ls *.cabal 2>/dev/null | grep -q .; then cabal build; else echo 'No Stack or Cabal found to build the code' >&2; exit 1; fi",
+    "tags": ["haskell-build"],
+    "shell": {
+      "with_arguments": {
+        "program": "/bin/sh",
+        "args": ["-c"]
+      }
+    },
+    "show_command": false
+  }
+]
