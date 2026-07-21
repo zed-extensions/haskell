@@ -1,7 +1,7 @@
 id = "haskell"
 name = "Haskell"
 description = "Haskell support."
-version = "0.3.2"
+version = "1.0.0"
 schema_version = 1
 authors = [
     "Pocæus <github@pocaeus.com>",
@@ -17,6 +17,8 @@ languages = [
     "Literate Haskell",
     # "Alex", # https://github.com/haskell/haskell-language-server/issues/4820
 ]
+
+[debug_adapters.haskell-debugger]
 
 [grammars.haskell]
 repository = "https://github.com/tree-sitter/tree-sitter-haskell"

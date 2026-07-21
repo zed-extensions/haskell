@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Haskell Debugger (hdb)",
+  "description": "Launch configuration for the Well-Typed Haskell debugger (hdb). Requires GHC 9.14+ and the `hdb` executable on PATH. See https://well-typed.github.io/haskell-debugger/",
+  "type": "object",
+  "required": ["projectRoot", "entryFile"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "const": "haskell-debugger",
+      "description": "Debug adapter id (matches VS Code `launch.json` type)."
+    },
+    "request": {
+      "type": "string",
+      "enum": ["launch"],
+      "default": "launch",
+      "description": "hdb currently supports launch sessions only."
+    },
+    "name": {
+      "type": "string",
+      "description": "Label for this debug session in the UI."
+    },
+    "projectRoot": {
+      "type": "string",
+      "description": "Absolute path to the project root (Cabal/Stack/hie-bios cradle root)."
+    },
+    "entryFile": {
+      "type": "string",
+      "description": "Path to the Haskell source file containing the entry point, relative to `projectRoot`."
+    },
+    "entryPoint": {
+      "type": "string",
+      "description": "Name of the function to start (`main` or another top-level binding).",
+      "default": "main"
+    },
+    "entryArgs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Arguments for the entry point. For `main`, these are passed as program arguments (`getArgs`).",
+      "default": []
+    },
+    "extraGhcArgs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Extra flags passed to the GHC invocation inferred by hie-bios.",
+      "default": []
+    },
+    "internalInterpreter": {
+      "type": "boolean",
+      "description": "Whether to use the internal GHCi interpreter for debugging.",
+      "default": false
+    },
+    "debugServer": {
+      "type": "integer",
+      "description": "If set, Zed connects to an already-running `hdb server` on this TCP port instead of spawning `hdb`. Same as VS Code `launch.json` `debugServer`. See https://well-typed.github.io/haskell-debugger/"
+    }
+  }
+}

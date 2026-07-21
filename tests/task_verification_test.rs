@@ -61,6 +61,11 @@ impl TestProject {
         self.mock_bin("cabal", "#!/bin/sh\necho \"CABAL_CALLED: $@\"");
     }
 
+    fn with_cabal_project(&self) {
+        fs::File::create(self.temp_dir.join("cabal.project")).unwrap();
+        self.mock_bin("cabal", "#!/bin/sh\necho \"CABAL_CALLED: $@\"");
+    }
+
     fn mock_bin(&self, name: &str, content: &str) {
         let bin_path = self.bin_dir.join(name);
         fs::write(&bin_path, content).unwrap();
@@ -69,6 +74,19 @@ impl TestProject {
             use std::os::unix::fs::PermissionsExt;
             fs::set_permissions(&bin_path, fs::Permissions::from_mode(0o755)).unwrap();
         }
+    }
+
+    fn run_task(&self, tag: &str) -> String {
+        let command = get_task_command_by_tag(tag);
+        let output = Command::new("sh")
+            .arg("-c")
+            .arg(&command)
+            .env("PATH", &self.new_path)
+            .current_dir(&self.temp_dir)
+            .output()
+            .expect("Failed to execute shell command");
+        String::from_utf8_lossy(&output.stdout).into_owned()
+            + &String::from_utf8_lossy(&output.stderr)
     }
 
     fn run_task_with_env(&self, tag: &str, env: &[(&str, &str)]) -> String {
@@ -91,6 +109,78 @@ impl Drop for TestProject {
     fn drop(&mut self) {
         let _ = fs::remove_dir_all(&self.temp_dir);
     }
+}
+
+#[test]
+fn test_stack_build() {
+    let project = TestProject::new("stack_build");
+    project.with_stack();
+    let output = project.run_task("haskell-build");
+    assert!(output.contains("STACK_CALLED: build"), "Got: {}", output);
+}
+
+#[test]
+fn test_stack_run() {
+    let project = TestProject::new("stack_run");
+    project.with_stack();
+    let output = project.run_task("haskell-run");
+    assert!(output.contains("STACK_CALLED: run"), "Got: {}", output);
+}
+
+#[test]
+fn test_cabal_build() {
+    let project = TestProject::new("cabal_build");
+    project.with_cabal();
+    let output = project.run_task("haskell-build");
+    assert!(output.contains("CABAL_CALLED: build"), "Got: {}", output);
+}
+
+#[test]
+fn test_cabal_run() {
+    let project = TestProject::new("cabal_run");
+    project.with_cabal();
+    let output = project.run_task("haskell-run");
+    assert!(output.contains("CABAL_CALLED: run"), "Got: {}", output);
+}
+
+#[test]
+fn test_cabal_project_build() {
+    let project = TestProject::new("cabal_project_build");
+    project.with_cabal_project();
+    let output = project.run_task("haskell-build");
+    assert!(output.contains("CABAL_CALLED: build"), "Got: {}", output);
+}
+
+#[test]
+fn test_cabal_project_run() {
+    let project = TestProject::new("cabal_project_run");
+    project.with_cabal_project();
+    let output = project.run_task("haskell-run");
+    assert!(output.contains("CABAL_CALLED: run"), "Got: {}", output);
+}
+
+#[test]
+fn test_stack_preferred_over_cabal() {
+    let project = TestProject::new("stack_preferred");
+    project.with_stack();
+    project.with_cabal();
+    let output = project.run_task("haskell-run");
+    assert!(
+        output.contains("STACK_CALLED: run"),
+        "Stack should be preferred when stack.yaml present. Got: {}",
+        output
+    );
+}
+
+#[test]
+fn test_no_build_tool() {
+    let project = TestProject::new("no_tool");
+    let output = project.run_task("haskell-build");
+    assert!(
+        output.contains("No Stack or Cabal found"),
+        "Got: {}",
+        output
+    );
 }
 
 // ZED_CUSTOM_HASKELL_TEST_NAME is the string token as captured by tree-sitter,
