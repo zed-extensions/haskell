@@ -88,6 +88,21 @@ impl TestProject {
         String::from_utf8_lossy(&output.stdout).into_owned()
             + &String::from_utf8_lossy(&output.stderr)
     }
+
+    fn run_task_with_env(&self, tag: &str, env: &[(&str, &str)]) -> String {
+        let command = get_task_command_by_tag(tag);
+        let mut cmd = Command::new("sh");
+        cmd.arg("-c")
+            .arg(&command)
+            .env("PATH", &self.new_path)
+            .current_dir(&self.temp_dir);
+        for (key, val) in env {
+            cmd.env(key, val);
+        }
+        let output = cmd.output().expect("Failed to execute shell command");
+        String::from_utf8_lossy(&output.stdout).into_owned()
+            + &String::from_utf8_lossy(&output.stderr)
+    }
 }
 
 impl Drop for TestProject {
@@ -166,4 +181,46 @@ fn test_no_build_tool() {
         "Got: {}",
         output
     );
+}
+
+// ZED_CUSTOM_HASKELL_TEST_NAME is the string token as captured by tree-sitter,
+// which includes the surrounding quotes (e.g. `"Functor"`, not `Functor`).
+// The task command strips them via `tr -d '"'` before passing to --match.
+
+#[test]
+fn test_stack_test_strips_quotes_and_passes_match() {
+    let project = TestProject::new("stack_test_match");
+    project.with_stack();
+    let output = project.run_task_with_env(
+        "haskell-test",
+        &[("ZED_CUSTOM_HASKELL_TEST_NAME", "\"Functor\"")],
+    );
+    assert!(
+        output.contains("STACK_CALLED: test --ta --match /Functor"),
+        "Got: {output}"
+    );
+}
+
+#[test]
+fn test_cabal_test_strips_quotes_and_passes_match() {
+    let project = TestProject::new("cabal_test_match");
+    project.with_cabal();
+    let output = project.run_task_with_env(
+        "haskell-test",
+        &[("ZED_CUSTOM_HASKELL_TEST_NAME", "\"RemoteData\"")],
+    );
+    assert!(
+        output.contains("CABAL_CALLED: test --test-options --match /RemoteData"),
+        "Got: {output}"
+    );
+}
+
+#[test]
+fn test_no_build_tool_test() {
+    let project = TestProject::new("no_tool_test");
+    let output = project.run_task_with_env(
+        "haskell-test",
+        &[("ZED_CUSTOM_HASKELL_TEST_NAME", "\"Functor\"")],
+    );
+    assert!(output.contains("No Stack or Cabal found"), "Got: {output}");
 }

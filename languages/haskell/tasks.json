@@ -22,5 +22,17 @@
       }
     },
     "show_command": false
+  },
+  {
+    "label": "Test $ZED_CUSTOM_HASKELL_TEST_NAME",
+    "command": "name=$(printf '%s' \"$ZED_CUSTOM_HASKELL_TEST_NAME\" | tr -d '\"'); if [ -f stack.yaml ]; then stack test --ta \"--match /$name\"; elif [ -f cabal.project ] || ls *.cabal 2>/dev/null | grep -q .; then cabal test --test-options \"--match /$name\"; else echo 'No Stack or Cabal found to run the tests' >&2; exit 1; fi",
+    "tags": ["haskell-test"],
+    "shell": {
+      "with_arguments": {
+        "program": "/bin/sh",
+        "args": ["-c"]
+      }
+    },
+    "show_command": false
   }
 ]
